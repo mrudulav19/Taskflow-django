@@ -1,0 +1,48 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Task | TaskFlow</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>TaskFlow</h1>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <h2>Delete Task</h2>
+            <p>Review this action before removing a task.</p>
+        </section>
+
+        <section class="panel">
+            <div class="warning">
+                <strong>Are you sure?</strong>
+                <p>
+                    You are about to permanently delete
+                    <strong class="task-title">"{{ task.title }}"</strong>.
+                    This action cannot be undone.
+                </p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-danger">
+                        Yes, Delete Task
+                    </button>
+
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

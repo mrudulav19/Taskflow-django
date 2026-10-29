@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Allow a safe example environment file
+!.env.example
+
+# Django
+db.sqlite3
+staticfiles/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
