@@ -99,7 +99,7 @@ TaskFlow/
 ### 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/mrudulav19/Taskflow-django
 cd TaskFlow
 ```
 
