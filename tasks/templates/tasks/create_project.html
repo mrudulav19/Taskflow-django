@@ -1,0 +1,35 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Project | TaskFlow</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Create New Project</h1>
+            <p>Organize your work by creating a new project.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+<button type="submit" class="submit-button">
+    Create Project
+</button>
+
+<a href="{% url 'dashboard' %}" class="btn btn-secondary">
+    Cancel
+</a>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

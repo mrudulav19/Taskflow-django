@@ -1,5 +1,6 @@
 
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,86 +11,108 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-    <header class="site-header">
-        <h1>
-            <a href="{% url 'dashboard' %}">TaskFlow</a>
-        </h1>
 
-        <nav class="nav-links">
-            {% if user.is_authenticated %}
-                <span class="welcome-user">
-                    Hi, {{ user.username }}!
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="navbar-content">
+            <a href="{% url 'dashboard' %}" class="logo">
+                <span class="logo-icon">T</span>
+                TaskFlow
+            </a>
+
+            <div class="nav-right">
+                <span class="welcome-text">
+                    Welcome, {{ request.user.username }}
                 </span>
 
-                <a href="{% url 'dashboard' %}" class="nav-link">
+                <a href="{% url 'dashboard' %}" class="nav-link active">
                     Dashboard
                 </a>
 
-                <form method="post" action="{% url 'logout' %}">
+                <form method="POST" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="nav-button">
-                        Log Out
+                    <button type="submit" class="logout-button">
+                        Logout
                     </button>
                 </form>
-            {% else %}
-                <a href="{% url 'login' %}" class="nav-link">
-                    Log In
-                </a>
-
-                <a href="{% url 'register' %}" class="nav-button">
-                    Register
-                </a>
-            {% endif %}
-        </nav>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <!-- Welcome section -->
-        <section class="welcome">
-            <h2>Your dashboard</h2>
-            <p>Keep your projects and tasks organized in one place.</p>
+    <main class="container">
+
+        <!-- Dashboard Heading -->
+        <section class="page-heading">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Manage your projects and tasks in one place.</p>
+            </div>
+
+            <a href="{% url 'create_project' %}" class="primary-button">
+                + Create Project
+            </a>
         </section>
 
         <!-- Statistics -->
-        <section class="stats">
-            <div class="card">
-                <p>Total Projects</p>
-                <h2>{{ projects|length }}</h2>
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon purple">▤</div>
+                <div>
+                    <p class="stat-label">Total Tasks</p>
+                    <h2>{{ total_tasks }}</h2>
+                </div>
             </div>
 
-            <div class="card">
-                <p>Total Tasks</p>
-                <h2>{{ total_tasks }}</h2>
+            <div class="stat-card">
+                <div class="stat-icon green">✓</div>
+                <div>
+                    <p class="stat-label">Completed Tasks</p>
+                    <h2>{{ completed_tasks }}</h2>
+                </div>
             </div>
 
-            <div class="card">
-                <p>Completed Tasks</p>
-                <h2>{{ completed_tasks }}</h2>
+            <div class="stat-card">
+                <div class="stat-icon blue">▦</div>
+                <div>
+                    <p class="stat-label">Total Projects</p>
+                    <h2>{{ projects.count }}</h2>
+                </div>
             </div>
+
         </section>
 
-        <!-- Create task form -->
-        <section class="task-section">
-            <h2>Add a New Task</h2>
+        <!-- Create Task -->
+        <section class="content-card">
+            <div class="section-heading">
+                <div>
+                    <h2>Create a Task</h2>
+                    <p>Add a new task to one of your projects.</p>
+                </div>
+            </div>
 
-            <form method="post" action="{% url 'dashboard' %}">
+            <form method="POST" class="task-form">
                 {% csrf_token %}
 
                 {{ form.as_p }}
 
-                <button type="submit" class="submit-button">
+                <button type="submit" class="primary-button">
                     Create Task
                 </button>
             </form>
         </section>
 
-        <!-- Task list -->
-        <section class="task-section">
-            <h2>Your Tasks</h2>
+        <!-- All Tasks -->
+        <section class="content-card">
+            <div class="section-heading">
+                <div>
+                    <h2>All Tasks</h2>
+                    <p>View and manage your tasks.</p>
+                </div>
+            </div>
 
-            {% if tasks %}
-                <table>
+            <div class="table-wrapper">
+                <table class="tasks-table">
                     <thead>
                         <tr>
                             <th>Task</th>
@@ -103,64 +126,108 @@
 
                     <tbody>
                         {% for task in tasks %}
-                            <tr>
-                                <td>{{ task.title }}</td>
+                        <tr>
+                            <td class="task-title">{{ task.title }}</td>
 
-                                <td>{{ task.project.name }}</td>
+                            <td>{{ task.project.name }}</td>
 
-                                <td>
-                                    <span class="badge">
-                                        {{ task.get_status_display }}
-                                    </span>
-                                </td>
+                            <td>
+                                <span class="status-text">
+                                    {{ task.get_status_display }}
+                                </span>
+                            </td>
 
-                                <td>{{ task.get_priority_display }}</td>
+                            <td>{{ task.get_priority_display }}</td>
 
-                                <td>
-                                    {% if task.due_date %}
-                                        {{ task.due_date|date:"d M Y" }}
-                                    {% else %}
-                                        —
-                                    {% endif %}
-                                </td>
+                            <td>{{ task.due_date|default:"-" }}</td>
 
-                                <td>
-                                    <a href="{% url 'edit_task' task.id %}">
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{% url 'edit_task' task.id %}"
+                                       class="edit-button">
                                         Edit
                                     </a>
-                                    |
-                                    <a href="{% url 'delete_task' task.id %}">
+
+                                    <a href="{% url 'delete_task' task.id %}"
+                                       class="delete-button">
                                         Delete
                                     </a>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                No tasks found. Create your first task!
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            {% else %}
-                <p class="empty">
-                    No tasks yet. Create your first task above!
-                </p>
-            {% endif %}
+            </div>
         </section>
 
-        <!-- Project list -->
-        <section class="task-section">
-            <h2>Your Projects</h2>
+        <!-- My Projects -->
+        <section class="content-card projects-card">
 
-            {% for project in projects %}
-                <div class="project-item">
-                    <strong>{{ project.name }}</strong>
-                    <p>
-                        {{ project.description|default:"No description provided." }}
-                    </p>
+            <div class="section-heading">
+                <div>
+                    <h2>My Projects</h2>
+                    <p>Manage your projects and their details.</p>
                 </div>
-            {% empty %}
-                <p class="empty">
-                    No projects created yet.
-                </p>
-            {% endfor %}
+
+                <a href="{% url 'create_project' %}" class="secondary-button">
+                    + New Project
+                </a>
+            </div>
+
+            <div class="projects-list">
+
+                {% for project in projects %}
+
+                <div class="project-row">
+
+                    <div class="project-name">
+                        {{ project.name }}
+                    </div>
+
+                    <div class="project-description">
+                        {{ project.description|default:"No description" }}
+                    </div>
+
+                    <div class="project-actions">
+
+                        <a href="{% url 'edit_project' project.id %}"
+                           class="edit-button">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'delete_project' project.id %}"
+                           class="delete-button">
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% empty %}
+
+                <div class="empty-state">
+                    No projects found. Create your first project!
+                </div>
+
+                {% endfor %}
+
+            </div>
         </section>
+
+        <footer class="footer">
+            TaskFlow · Stay organized. Get things done.
+        </footer>
+
     </main>
+
 </body>
 </html>

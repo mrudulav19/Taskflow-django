@@ -1,0 +1,79 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Project | TaskFlow</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="navbar-content">
+            <a href="{% url 'dashboard' %}" class="logo">
+                <span class="logo-icon">T</span>
+                TaskFlow
+            </a>
+
+            <div class="nav-right">
+                <span class="welcome-text">
+                    Welcome, {{ request.user.username }}
+                </span>
+
+                <a href="{% url 'dashboard' %}" class="nav-link">
+                    Dashboard
+                </a>
+
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="confirmation-container">
+
+        <div class="confirmation-card">
+
+            <div class="warning-icon">
+                !
+            </div>
+
+            <h1>Delete Project?</h1>
+
+            <p class="confirmation-description">
+                Are you sure you want to delete
+                <strong>{{ project.name }}</strong>?
+            </p>
+
+            <div class="warning-message">
+                <strong>Warning:</strong>
+                All tasks associated with this project will also be
+                permanently deleted. This action cannot be undone.
+            </div>
+
+            <form method="POST" class="confirmation-actions">
+                {% csrf_token %}
+
+                <button type="submit" class="confirm-delete-button">
+                    Yes, Delete Project
+                </button>
+
+                <a href="{% url 'dashboard' %}" class="cancel-button">
+                    Cancel
+                </a>
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

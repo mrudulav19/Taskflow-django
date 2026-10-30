@@ -1,5 +1,6 @@
+
 from django import forms
-from .models import Task
+from .models import Task, Project
 
 
 class TaskForm(forms.ModelForm):
@@ -27,9 +28,19 @@ class TaskForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields["project"].queryset = (
-            Task._meta.get_field("project")
-            .remote_field.model.objects.none()
+            Project.objects.none()
             if user is None
-            else Task._meta.get_field("project")
-            .remote_field.model.objects.filter(owner=user)
+            else Project.objects.filter(owner=user)
         )
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ["name", "description"]
+
+        widgets = {
+            "description": forms.Textarea(
+                attrs={"rows": 3}
+            ),
+        }
