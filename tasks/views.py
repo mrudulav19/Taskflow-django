@@ -1,8 +1,11 @@
+from urllib import request
+
 from django.shortcuts import render, redirect
 from .models import Project, Task
 from .forms import TaskForm
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def dashboard(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
@@ -12,9 +15,11 @@ def dashboard(request):
             return redirect("dashboard")
     else:
         form = TaskForm()
+    projects = Project.objects.filter(owner=request.user)
 
-    projects = Project.objects.all()
-    tasks = Task.objects.select_related("project").all()
+    tasks = Task.objects.filter(
+        project__owner=request.user
+    ).select_related("project")
 
     context = {
         "projects": projects,
@@ -29,7 +34,11 @@ def dashboard(request):
     return render(request, "tasks/dashboard.html", context)
 
 def edit_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(
+        Task,
+        id=task_id,
+        project__owner=request.user,
+    )
 
     if request.method == "POST":
         form = TaskForm(request.POST, instance=task)
@@ -48,7 +57,11 @@ def edit_task(request, task_id):
 
 
 def delete_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(
+        Task,
+        id=task_id,
+        project__owner=request.user,
+    )
 
     if request.method == "POST":
         task.delete()

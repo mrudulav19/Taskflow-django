@@ -1,4 +1,8 @@
 
+/* =========================
+   Global styles
+========================= */
+
 * {
     box-sizing: border-box;
 }
@@ -8,54 +12,177 @@ body {
     font-family: Arial, sans-serif;
     background: #f5f7fb;
     color: #202938;
+    line-height: 1.5;
 }
 
-header {
-    background: white;
-    padding: 22px 5%;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-header h1 {
-    margin: 0;
+a {
     color: #4f46e5;
 }
 
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/* =========================
+   Header and navigation
+========================= */
+
+header,
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 22px 5%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+header h1,
+.site-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #4f46e5;
+}
+
+.site-header h1 a {
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.welcome-user {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.nav-link {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: #3730a3;
+}
+
+.nav-links form {
+    margin: 0;
+}
+
+.nav-button {
+    display: inline-block;
+    padding: 10px 16px;
+    background: #4f46e5;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-button:hover {
+    background: #4338ca;
+}
+
+/* =========================
+   Main layout
+========================= */
+
 main {
-    max-width: 760px;
-    margin: 45px auto;
+    max-width: 1100px;
+    margin: 35px auto;
     padding: 0 20px;
 }
 
-.page-heading {
-    margin-bottom: 24px;
+.page-heading,
+.welcome {
+    margin-bottom: 25px;
 }
 
-.page-heading h2 {
-    margin-bottom: 8px;
+.page-heading h2,
+.welcome h2 {
+    margin: 0 0 8px;
     font-size: 28px;
 }
 
-.page-heading p {
+.page-heading p,
+.welcome p {
     color: #64748b;
+    margin: 0;
     line-height: 1.6;
 }
 
-.panel {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 30px;
-    box-shadow: 0 4px 16px rgba(31, 41, 55, 0.04);
+/* =========================
+   Dashboard statistics
+========================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
 }
 
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.card p {
+    color: #64748b;
+    margin: 0 0 12px;
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 30px;
+}
+
+/* =========================
+   Panels and sections
+========================= */
+
+.panel,
+.task-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(31, 41, 55, 0.03);
+}
+
+.panel h2,
+.task-section h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+/* =========================
+   Forms and input fields
+========================= */
+
 form p {
-    margin-bottom: 20px;
+    margin: 0 0 18px;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     font-weight: 600;
 }
 
@@ -63,11 +190,12 @@ input,
 select,
 textarea {
     width: 100%;
-    padding: 12px;
+    padding: 11px 12px;
+    margin-top: 5px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    font: inherit;
-    background: white;
+    background: #ffffff;
+    color: #202938;
 }
 
 input:focus,
@@ -75,6 +203,10 @@ select:focus,
 textarea:focus {
     outline: 2px solid #c7d2fe;
     border-color: #6366f1;
+}
+
+textarea {
+    resize: vertical;
 }
 
 .helptext {
@@ -86,33 +218,42 @@ textarea:focus {
 
 .errorlist {
     color: #b91c1c;
+    padding-left: 20px;
+    font-size: 14px;
 }
 
 .actions {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 24px;
 }
 
-.btn {
+/* =========================
+   Buttons
+========================= */
+
+.btn,
+.submit-button {
     display: inline-block;
     padding: 11px 18px;
     border: none;
     border-radius: 8px;
-    font: inherit;
     font-weight: 600;
     text-decoration: none;
     text-align: center;
     cursor: pointer;
 }
 
-.btn-primary {
+.btn-primary,
+.submit-button {
     background: #4f46e5;
-    color: white;
+    color: #ffffff;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.submit-button:hover {
     background: #4338ca;
 }
 
@@ -127,12 +268,67 @@ textarea:focus {
 
 .btn-danger {
     background: #dc2626;
-    color: white;
+    color: #ffffff;
 }
 
 .btn-danger:hover {
     background: #b91c1c;
 }
+
+/* =========================
+   Task table
+========================= */
+
+.task-section {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #edf0f4;
+    white-space: nowrap;
+}
+
+th {
+    color: #64748b;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 12px;
+}
+
+.empty {
+    color: #64748b;
+    padding: 20px 0;
+}
+
+.task-title {
+    color: #4f46e5;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   Delete confirmation
+========================= */
 
 .warning {
     padding: 16px;
@@ -143,21 +339,65 @@ textarea:focus {
     line-height: 1.6;
 }
 
-.task-title {
-    color: #4f46e5;
-    overflow-wrap: anywhere;
+.warning p {
+    margin-bottom: 0;
 }
 
-@media (max-width: 600px) {
+/* =========================
+   Project list
+========================= */
+
+.project-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.project-item:last-child {
+    border-bottom: none;
+}
+
+.project-item p {
+    margin-bottom: 0;
+    color: #64748b;
+}
+
+/* =========================
+   Responsive design
+========================= */
+
+@media (max-width: 700px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    header,
+    .site-header {
+        padding: 18px 20px;
+    }
+
+    .nav-links {
+        gap: 12px;
+    }
+
     main {
         margin: 25px auto;
     }
 
-    .panel {
-        padding: 20px;
+    .page-heading h2,
+    .welcome h2 {
+        font-size: 24px;
     }
 
-    .page-heading h2 {
-        font-size: 24px;
+    .panel,
+    .task-section {
+        padding: 18px;
+    }
+
+    .actions {
+        align-items: stretch;
+    }
+
+    .actions .btn {
+        flex: 1;
     }
 }

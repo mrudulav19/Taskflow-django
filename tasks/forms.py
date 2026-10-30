@@ -22,3 +22,14 @@ class TaskForm(forms.ModelForm):
                 attrs={"rows": 3}
             ),
         }
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["project"].queryset = (
+            Task._meta.get_field("project")
+            .remote_field.model.objects.none()
+            if user is None
+            else Task._meta.get_field("project")
+            .remote_field.model.objects.filter(owner=user)
+        )
