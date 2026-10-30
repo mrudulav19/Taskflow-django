@@ -1,5 +1,6 @@
 
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,33 +10,98 @@
     <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
 </head>
 <body>
-    <header>
-        <h1>TaskFlow</h1>
-    </header>
 
-    <main>
-        <section class="page-heading">
-            <h2>Edit Task</h2>
-            <p>Update the details and keep your project on track.</p>
-        </section>
+<header class="navbar">
+    <div class="navbar-content">
+        <a href="{% url 'dashboard' %}" class="logo">
+            <span class="logo-icon">T</span> TaskFlow
+        </a>
 
-        <section class="panel">
-            <form method="post">
+        <div class="nav-right">
+            <span class="welcome-text">Welcome, {{ request.user.username }}</span>
+            <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+
+            <form method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
-
-                {{ form.as_p }}
-
-                <div class="actions">
-                    <button type="submit" class="btn btn-primary">
-                        Save Changes
-                    </button>
-
-                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                </div>
+                <button type="submit" class="logout-button">Logout</button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
+</header>
+
+<main class="edit-container">
+    <div class="edit-card">
+
+        <div class="edit-icon">✎</div>
+
+        <h1>Edit Task</h1>
+        <p class="edit-subtitle">
+            Update the details of <strong>{{ task.title }}</strong>.
+        </p>
+
+        <form method="POST" class="project-edit-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.project.id_for_label }}">Project</label>
+                {{ form.project }}
+                {% if form.project.errors %}
+                    <div class="form-error">{{ form.project.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Task Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="form-error">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="form-error">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.status.id_for_label }}">Status</label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                    <div class="form-error">{{ form.status.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.priority.id_for_label }}">Priority</label>
+                {{ form.priority }}
+                {% if form.priority.errors %}
+                    <div class="form-error">{{ form.priority.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.due_date.id_for_label }}">Due Date</label>
+                {{ form.due_date }}
+                {% if form.due_date.errors %}
+                    <div class="form-error">{{ form.due_date.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="edit-actions">
+                <button type="submit" class="save-button">Save Changes</button>
+                <a href="{% url 'dashboard' %}" class="cancel-button">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</main>
+
 </body>
 </html>

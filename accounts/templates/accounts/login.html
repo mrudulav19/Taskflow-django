@@ -8,31 +8,54 @@
     <title>Login | TaskFlow</title>
     <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
 </head>
-<body>
-    <header><h1>TaskFlow</h1></header>
+<body class="auth-page">
 
-    <main>
-        <section class="page-heading">
+    <header class="auth-header">
+        <h1>TaskFlow</h1>
+    </header>
+
+    <main class="auth-container">
+
+        <section class="auth-heading">
             <h2>Welcome back</h2>
             <p>Log in to continue managing your tasks.</p>
         </section>
 
-        <section class="panel">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
+        <section class="auth-card">
 
-                <div class="actions">
-                    <button class="btn btn-primary" type="submit">
-                        Log In
-                    </button>
-                </div>
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="auth-field">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="field-error">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button class="primary-button auth-submit" type="submit">
+                    Log In
+                </button>
             </form>
 
-            <p>New to TaskFlow?
+            <p class="auth-footer">
+                New to TaskFlow?
                 <a href="{% url 'register' %}">Create an account</a>
             </p>
+
         </section>
     </main>
+
 </body>
 </html>

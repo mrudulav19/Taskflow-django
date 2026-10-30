@@ -17,23 +17,73 @@ def dashboard(request):
     else:
         form = TaskForm(user=request.user)
 
+    # Get projects belonging to the logged-in user
     projects = Project.objects.filter(owner=request.user)
 
-    tasks = Task.objects.filter(
+    # Get tasks belonging to the logged-in user's projects
+    all_tasks = Task.objects.filter(
         project__owner=request.user
     ).select_related("project")
 
+    # Read selected filters from the URL
+    selected_status = request.GET.get("status", "")
+    selected_priority = request.GET.get("priority", "")
+    selected_project = request.GET.get("project", "")
+    search_query = request.GET.get("search", "").strip()
+
+    # Start with all tasks
+    tasks = all_tasks
+    if search_query:
+        tasks = tasks.filter(title__icontains=search_query)
+
+    # Apply status filter
+    valid_statuses = [
+        choice[0] for choice in Task.Status.choices
+    ]
+
+    if selected_status in valid_statuses:
+        tasks = tasks.filter(status=selected_status)
+    else:
+        selected_status = ""
+
+    # Apply priority filter
+    valid_priorities = [
+        choice[0] for choice in Task.Priority.choices
+    ]
+
+    if selected_priority in valid_priorities:
+        tasks = tasks.filter(priority=selected_priority)
+    else:
+        selected_priority = ""
+
+    # Filter by project
+    if selected_project.isdigit():
+        tasks = tasks.filter(project_id=int(selected_project))
+    else:
+        selected_project = ""
+
+    # Dashboard statistics
     context = {
         "projects": projects,
         "tasks": tasks,
-        "total_tasks": tasks.count(),
-        "completed_tasks": tasks.filter(
+        "total_tasks": all_tasks.count(),
+        "completed_tasks": all_tasks.filter(
             status=Task.Status.DONE
         ).count(),
         "form": form,
+        "selected_status": selected_status,
+        "status_choices": Task.Status.choices,
+        "selected_priority": selected_priority,
+        "priority_choices": Task.Priority.choices,
+        "selected_project": selected_project,
+        "search_query": search_query
     }
 
-    return render(request, "tasks/dashboard.html", context)
+    return render(
+        request,
+        "tasks/dashboard.html",
+        context,
+    )
 
 
 @login_required
@@ -52,7 +102,7 @@ def create_project(request):
     return render(
         request,
         "tasks/create_project.html",
-        {"form": form}
+        {"form": form},
     )
 
 
@@ -105,6 +155,7 @@ def delete_task(request, task_id):
         {"task": task},
     )
 
+
 @login_required
 def delete_project(request, project_id):
     project = get_object_or_404(
@@ -123,6 +174,7 @@ def delete_project(request, project_id):
         {"project": project},
     )
 
+
 @login_required
 def edit_project(request, project_id):
     project = get_object_or_404(
@@ -132,7 +184,10 @@ def edit_project(request, project_id):
     )
 
     if request.method == "POST":
-        form = ProjectForm(request.POST, instance=project)
+        form = ProjectForm(
+            request.POST,
+            instance=project,
+        )
 
         if form.is_valid():
             form.save()

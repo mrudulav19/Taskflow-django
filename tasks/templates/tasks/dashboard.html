@@ -12,9 +12,10 @@
 
 <body>
 
-    <!-- Navigation -->
+    <!-- Navigation Bar -->
     <header class="navbar">
         <div class="navbar-content">
+
             <a href="{% url 'dashboard' %}" class="logo">
                 <span class="logo-icon">T</span>
                 TaskFlow
@@ -25,7 +26,7 @@
                     Welcome, {{ request.user.username }}
                 </span>
 
-                <a href="{% url 'dashboard' %}" class="nav-link active">
+                <a href="{% url 'dashboard' %}" class="nav-link">
                     Dashboard
                 </a>
 
@@ -36,12 +37,14 @@
                     </button>
                 </form>
             </div>
+
         </div>
     </header>
 
+
     <main class="container">
 
-        <!-- Dashboard Heading -->
+        <!-- Page Heading -->
         <section class="page-heading">
             <div>
                 <h1>Dashboard</h1>
@@ -53,179 +56,383 @@
             </a>
         </section>
 
+
         <!-- Statistics -->
         <section class="stats-grid">
 
             <div class="stat-card">
-                <div class="stat-icon purple">▤</div>
-                <div>
-                    <p class="stat-label">Total Tasks</p>
+                <div class="stat-info">
+                    <p>Total Tasks</p>
                     <h2>{{ total_tasks }}</h2>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon green">✓</div>
-                <div>
-                    <p class="stat-label">Completed Tasks</p>
+                <div class="stat-info">
+                    <p>Completed Tasks</p>
                     <h2>{{ completed_tasks }}</h2>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon blue">▦</div>
-                <div>
-                    <p class="stat-label">Total Projects</p>
+                <div class="stat-info">
+                    <p>Total Projects</p>
                     <h2>{{ projects.count }}</h2>
                 </div>
             </div>
 
         </section>
 
+
         <!-- Create Task -->
         <section class="content-card">
+
             <div class="section-heading">
-                <div>
-                    <h2>Create a Task</h2>
-                    <p>Add a new task to one of your projects.</p>
-                </div>
+                <h2>Create New Task</h2>
+                <p>Add a task to one of your projects.</p>
             </div>
 
             <form method="POST" class="task-form">
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                {% if form.non_field_errors %}
+                    <div class="form-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="{{ form.project.id_for_label }}">
+                        Project
+                    </label>
+                    {{ form.project }}
+                    {{ form.project.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">
+                        Task Title
+                    </label>
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">
+                        Description
+                    </label>
+                    {{ form.description }}
+                    {{ form.description.errors }}
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="{{ form.status.id_for_label }}">
+                            Status
+                        </label>
+                        {{ form.status }}
+                        {{ form.status.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.priority.id_for_label }}">
+                            Priority
+                        </label>
+                        {{ form.priority }}
+                        {{ form.priority.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.due_date.id_for_label }}">
+                            Due Date
+                        </label>
+                        {{ form.due_date }}
+                        {{ form.due_date.errors }}
+                    </div>
+
+                </div>
 
                 <button type="submit" class="primary-button">
-                    Create Task
+                    Add Task
                 </button>
+
             </form>
+
         </section>
+
 
         <!-- All Tasks -->
         <section class="content-card">
+
             <div class="section-heading">
-                <div>
-                    <h2>All Tasks</h2>
-                    <p>View and manage your tasks.</p>
+                <h2>All Tasks</h2>
+                <p>View and manage your tasks.</p>
+            </div>
+
+
+            <!-- Search and Filters -->
+            <form method="GET"
+                  action="{% url 'dashboard' %}"
+                  class="filter-form">
+
+                <!-- Search -->
+                <div class="filter-group">
+                    <label for="task-search">Search tasks</label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        id="task-search"
+                        placeholder="Search by task title..."
+                        value="{{ search_query }}"
+                    >
                 </div>
-            </div>
 
-            <div class="table-wrapper">
-                <table class="tasks-table">
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Project</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Due Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+                <!-- Status Filter -->
+                <div class="filter-group">
+                    <label for="status-filter">
+                        Filter by status
+                    </label>
 
-                    <tbody>
-                        {% for task in tasks %}
-                        <tr>
-                            <td class="task-title">{{ task.title }}</td>
+                    <select name="status" id="status-filter">
+                        <option value=""
+                            {% if not selected_status %}selected{% endif %}>
+                            All Statuses
+                        </option>
 
-                            <td>{{ task.project.name }}</td>
-
-                            <td>
-                                <span class="status-text">
-                                    {{ task.get_status_display }}
-                                </span>
-                            </td>
-
-                            <td>{{ task.get_priority_display }}</td>
-
-                            <td>{{ task.due_date|default:"-" }}</td>
-
-                            <td>
-                                <div class="table-actions">
-                                    <a href="{% url 'edit_task' task.id %}"
-                                       class="edit-button">
-                                        Edit
-                                    </a>
-
-                                    <a href="{% url 'delete_task' task.id %}"
-                                       class="delete-button">
-                                        Delete
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="empty-state">
-                                No tasks found. Create your first task!
-                            </td>
-                        </tr>
+                        {% for value, label in status_choices %}
+                            <option value="{{ value }}"
+                                {% if selected_status == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    </select>
+                </div>
+
+                <!-- Priority Filter -->
+                <div class="filter-group">
+                    <label for="priority-filter">
+                        Filter by priority
+                    </label>
+
+                    <select name="priority" id="priority-filter">
+                        <option value=""
+                            {% if not selected_priority %}selected{% endif %}>
+                            All Priorities
+                        </option>
+
+                        {% for value, label in priority_choices %}
+                            <option value="{{ value }}"
+                                {% if selected_priority == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Project Filter -->
+                <div class="filter-group">
+                    <label for="project-filter">
+                        Filter by project
+                    </label>
+
+                    <select name="project" id="project-filter">
+                        <option value=""
+                            {% if not selected_project %}selected{% endif %}>
+                            All Projects
+                        </option>
+
+                        {% for project in projects %}
+                            <option value="{{ project.id }}"
+                                {% if selected_project == project.id|stringformat:"s" %}selected{% endif %}>
+                                {{ project.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="filter-button">
+                    Apply Filters
+                </button>
+
+                <a href="{% url 'dashboard' %}"
+                   class="clear-filter-button">
+                    Clear Filters
+                </a>
+
+            </form>
+
+
+            <!-- Tasks Table -->
+            {% if tasks %}
+
+                <div class="table-container">
+                    <table class="tasks-table">
+
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Project</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Due Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for task in tasks %}
+
+                                <tr>
+                                    <td>
+                                        <strong>{{ task.title }}</strong>
+
+                                        {% if task.description %}
+                                            <p>{{ task.description }}</p>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>{{ task.project.name }}</td>
+
+                                    <td>
+                                        <span class="status-badge">
+                                            {{ task.get_status_display }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="priority-badge">
+                                            {{ task.get_priority_display }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {% if task.due_date %}
+                                            {{ task.due_date|date:"d M Y" }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <div class="project-actions">
+
+                                            <a href="{% url 'edit_task' task.id %}"
+                                               class="edit-button">
+                                                Edit
+                                            </a>
+
+                                            <a href="{% url 'delete_task' task.id %}"
+                                               class="delete-button">
+                                                Delete
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+            {% else %}
+
+                <!-- Improved Task Empty State -->
+                <div class="empty-state">
+
+                    {% if search_query or selected_status or selected_priority or selected_project %}
+
+                        <h3>No matching tasks found</h3>
+                        <p>Try changing your search or filters to find what you're looking for.</p>
+
+                        <a href="{% url 'dashboard' %}" class="clear-filter-button">
+                            Clear Filters
+                        </a>
+
+                    {% else %}
+
+                        <h3>No tasks yet</h3>
+                        <p>You haven't created any tasks. Use the form above to add your first task.</p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
         </section>
+
 
         <!-- My Projects -->
-        <section class="content-card projects-card">
+        <section class="content-card">
 
             <div class="section-heading">
-                <div>
-                    <h2>My Projects</h2>
-                    <p>Manage your projects and their details.</p>
-                </div>
-
-                <a href="{% url 'create_project' %}" class="secondary-button">
-                    + New Project
-                </a>
+                <h2>My Projects</h2>
+                <p>Manage your existing projects.</p>
             </div>
 
-            <div class="projects-list">
 
-                {% for project in projects %}
+            {% if projects %}
 
-                <div class="project-row">
+                <div class="projects-list">
 
-                    <div class="project-name">
-                        {{ project.name }}
-                    </div>
+                    {% for project in projects %}
 
-                    <div class="project-description">
-                        {{ project.description|default:"No description" }}
-                    </div>
+                        <div class="project-row">
 
-                    <div class="project-actions">
+                            <div class="project-name">
+                                <strong>{{ project.name }}</strong>
+                            </div>
 
-                        <a href="{% url 'edit_project' project.id %}"
-                           class="edit-button">
-                            Edit
-                        </a>
+                            <div class="project-description">
+                                {% if project.description %}
+                                    {{ project.description }}
+                                {% else %}
+                                    No description provided.
+                                {% endif %}
+                            </div>
 
-                        <a href="{% url 'delete_project' project.id %}"
-                           class="delete-button">
-                            Delete
-                        </a>
+                            <div class="project-actions">
 
-                    </div>
+                                <a href="{% url 'edit_project' project.id %}"
+                                   class="edit-button">
+                                    Edit
+                                </a>
+
+                                <a href="{% url 'delete_project' project.id %}"
+                                   class="delete-button">
+                                    Delete
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
-                {% empty %}
+            {% else %}
 
                 <div class="empty-state">
-                    No projects found. Create your first project!
+                    <h3>No projects yet</h3>
+                    <p>Create your first project to get started.</p>
+
+                    <a href="{% url 'create_project' %}"
+                       class="primary-button">
+                        Create Project
+                    </a>
                 </div>
 
-                {% endfor %}
+            {% endif %}
 
-            </div>
         </section>
-
-        <footer class="footer">
-            TaskFlow · Stay organized. Get things done.
-        </footer>
 
     </main>
 

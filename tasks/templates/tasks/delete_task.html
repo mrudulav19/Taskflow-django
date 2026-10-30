@@ -1,5 +1,6 @@
 
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,40 +10,56 @@
     <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
 </head>
 <body>
-    <header>
-        <h1>TaskFlow</h1>
-    </header>
 
-    <main>
-        <section class="page-heading">
-            <h2>Delete Task</h2>
-            <p>Review this action before removing a task.</p>
-        </section>
+<header class="navbar">
+    <div class="navbar-content">
+        <a href="{% url 'dashboard' %}" class="logo">
+            <span class="logo-icon">T</span> TaskFlow
+        </a>
 
-        <section class="panel">
-            <div class="warning">
-                <strong>Are you sure?</strong>
-                <p>
-                    You are about to permanently delete
-                    <strong class="task-title">"{{ task.title }}"</strong>.
-                    This action cannot be undone.
-                </p>
-            </div>
+        <div class="nav-right">
+            <span class="welcome-text">Welcome, {{ request.user.username }}</span>
+            <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
 
-            <form method="post">
+            <form method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
-
-                <div class="actions">
-                    <button type="submit" class="btn btn-danger">
-                        Yes, Delete Task
-                    </button>
-
-                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                </div>
+                <button type="submit" class="logout-button">Logout</button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
+</header>
+
+<main class="confirmation-container">
+    <div class="confirmation-card">
+
+        <div class="warning-icon">!</div>
+
+        <h1>Delete Task?</h1>
+
+        <p class="confirmation-description">
+            Are you sure you want to delete
+            <strong>{{ task.title }}</strong>?
+        </p>
+
+        <div class="warning-message">
+            <strong>Warning:</strong>
+            This task will be permanently deleted. This action cannot be undone.
+        </div>
+
+        <form method="POST" class="confirmation-actions">
+            {% csrf_token %}
+
+            <button type="submit" class="confirm-delete-button">
+                Yes, Delete Task
+            </button>
+
+            <a href="{% url 'dashboard' %}" class="cancel-button">
+                Cancel
+            </a>
+        </form>
+
+    </div>
+</main>
+
 </body>
 </html>

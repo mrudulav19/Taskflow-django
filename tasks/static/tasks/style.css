@@ -841,3 +841,357 @@ button {
         text-align: center;
     }
 }
+
+
+/* Task status filter */
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.filter-form label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.filter-form select {
+    min-width: 160px;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+}
+
+.filter-form select:focus {
+    border-color: #5145e5;
+    box-shadow: 0 0 0 3px rgba(81, 69, 229, 0.12);
+}
+
+@media (max-width: 600px) {
+    .filter-form {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .filter-form select {
+        width: 100%;
+    }
+}
+
+
+/* Task filtering */
+.filter-form {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 18px 0 24px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.filter-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.filter-group select {
+    min-width: 160px;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    font-size: 14px;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #5145e5;
+    box-shadow: 0 0 0 3px rgba(81, 69, 229, 0.12);
+}
+
+.filter-button,
+.clear-filter-button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.filter-button {
+    border: none;
+    background: #5145e5;
+    color: white;
+}
+
+.filter-button:hover {
+    background: #4035c7;
+}
+
+.clear-filter-button {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.clear-filter-button:hover {
+    background: #e5e7eb;
+}
+
+@media (max-width: 600px) {
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group select {
+        width: 100%;
+    }
+}
+
+
+/* ==============================
+   MOBILE TASK TABLE SCROLLING
+================================= */
+
+/* Keep the table readable on narrow screens without shrinking columns. */
+.table-wrapper,
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tasks-table {
+    width: 100%;
+    min-width: 700px;
+}
+
+/* Allow content cards to shrink to the available mobile width. */
+.content-card {
+    min-width: 0;
+}
+
+
+/* ==============================
+   FILTER FORM POLISH
+================================= */
+
+.filter-group input,
+.filter-group select {
+    min-width: 160px;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: #5145e5;
+    box-shadow: 0 0 0 3px rgba(81, 69, 229, 0.12);
+}
+
+.filter-group input {
+    min-width: 210px;
+}
+
+/* Consistent button height in filter form */
+.filter-button,
+.clear-filter-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+}
+
+/* Better empty-state presentation */
+.empty-state h3 {
+    color: #334155;
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.empty-state p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+/* Mobile filter layout */
+@media (max-width: 600px) {
+    .filter-group,
+    .filter-group input,
+    .filter-group select {
+        width: 100%;
+    }
+
+    .filter-button,
+    .clear-filter-button {
+        width: 100%;
+    }
+}
+
+
+/* AUTHENTICATION PAGES */
+
+.auth-page {
+    min-height: 100vh;
+    background: #f5f6fa;
+}
+
+.auth-header {
+    background: #ffffff;
+    padding: 20px 40px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.auth-header h1 {
+    color: #5145e5;
+    font-size: 26px;
+    margin: 0;
+}
+
+.auth-container {
+    width: 90%;
+    max-width: 440px;
+    margin: 65px auto;
+}
+
+.auth-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-heading h2 {
+    color: #1e293b;
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.auth-heading p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.auth-card {
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+.auth-field {
+    margin-bottom: 20px;
+}
+
+.auth-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.auth-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.auth-field input:focus {
+    outline: none;
+    border-color: #5145e5;
+    box-shadow: 0 0 0 3px rgba(81, 69, 229, 0.12);
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.auth-footer a {
+    color: #5145e5;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.form-errors,
+.field-error {
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+    .auth-header {
+        padding: 18px 20px;
+    }
+
+    .auth-container {
+        margin: 40px auto;
+    }
+
+    .auth-card {
+        padding: 24px;
+    }
+}
+
+
+/* REGISTRATION HELP TEXT */
+
+.auth-help {
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 7px;
+}
+
+.auth-help ul {
+    padding-left: 20px;
+    margin: 6px 0;
+}
+
+.auth-help li {
+    margin-bottom: 3px;
+}
+
+.auth-field input {
+    margin-top: 2px;
+}
